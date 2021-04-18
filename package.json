@@ -1,0 +1,35 @@
+{
+  "name": "mcq_api",
+  "version": "1.0.0",
+  "description": "Building an app to create set of mcq questions with an correct answer by admin and it be attempted by user for which results are calculated.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stharohit/mcq.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stharohit/mcq/issues"
+  },
+  "homepage": "https://github.com/stharohit/mcq#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "mariadb": "^2.5.3",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
