@@ -3,7 +3,8 @@ const router = express.Router();
 const testController = require('../controller/test.controller');
 const { adminAccessHandler, userAccessHandler } = require('../lib/auth');
 
-router.get('/', testController.getTests);
+router.get('/', adminAccessHandler, testController.getTests);
+router.get('/user', testController.getUserTests);
 router.post('/createTests', adminAccessHandler, testController.createTests);
 router.post('/addMCQ', adminAccessHandler, testController.addMCQToTests);
 router.post('/submit', userAccessHandler, testController.takeTests);

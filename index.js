@@ -11,7 +11,6 @@ app.use(express.json())
 // connect to database
 db.authenticate().then(() => {
     console.log('Connected to database.... Happy Coding!');
-    // db.drop();
     db.sync();
 }).catch((error) => {
     console.log(error);

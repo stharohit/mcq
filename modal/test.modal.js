@@ -15,6 +15,10 @@ const Tests = database.define('Tests', {
     },
     description: {
         type: DataTypes.STRING
+    },
+    isAvailable: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
     }
 });
 

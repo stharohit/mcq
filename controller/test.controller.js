@@ -33,7 +33,47 @@ const getTests = (req, res) => {
 
     try {
         Tests.findAll({
+            attributes: ['id', 'name', 'description', 'isAvailable'],
+            include: [{
+                model: Question,
+                as: "question",
+                attributes: ['id', 'question'],
+                required: false,
+                include: [{
+                    association: QuestionOption,
+                    attributes: ['id', 'option'],
+                    required: false,
+                }]
+            }]
+        }).then((tests) => {
+            return res.status(200).json({
+                success: true,
+                tests: tests
+            })
+        })
+            .catch(error => {
+                return res.status(404).json({
+                    success: false,
+                    error: error.message
+                });
+            })
+    }
+    catch (error) {
+        return res.status(400).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
+
+const getUserTests = (req, res) => {
+
+    try {
+        Tests.findAll({
             attributes: ['id', 'name', 'description'],
+            where: {
+                isAvailable: true
+            },
             include: [{
                 model: Question,
                 as: "question",
@@ -67,10 +107,21 @@ const getTests = (req, res) => {
 }
 
 const addMCQToTests = (req, res) => {
-    const { mcqs } = req.body;
+    const { mcqs, TestId } = req.body;
+    const currentMCQs = mcqs.map(mcq => {
+        mcq.TestId = TestId;
+        return mcq;
+    })
 
     try {
-        Question.bulkCreate(mcqs, { include: QuestionOption }).then((test) => {
+        Question.bulkCreate(currentMCQs, { include: QuestionOption}).then((test) => {
+            Tests.update({
+                isAvailable: true
+            }, {
+                where: {
+                    id: TestId
+                }
+            });
             return res.status(200).json({
                 success: true,
                 message: 'MCQ successfully added!'
@@ -93,7 +144,13 @@ const addMCQToTests = (req, res) => {
 
 const takeTests = async (req, res) => {
     const { testId, tests } = req.body;
-    console.log(req.token.id);
+    const data = await Tests.findByPk(testId);
+    if (!data.isAvailable) {
+        return res.status(404).json({
+            success: false,
+            message: 'Tests not found'
+        })
+    }
     try {
         const testsQuestion = await Tests.findOne({
             where: {
@@ -284,5 +341,6 @@ module.exports = {
     getReports,
     getUserReports,
     passedReports,
-    failedReports
+    failedReports,
+    getUserTests
 }
